@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<image class="logo" src="../../static/logo.png"></image>
-		<view>
+		<view @click="test">
 			<text class="title">{{ title }}</text>
 		</view>
 	</view>
@@ -10,7 +10,13 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 @Component<Index>({})
-export default class Index extends Vue {}
+export default class Index extends Vue {
+	public title: string = '你好123';
+
+	public test() {
+		return this.$pupop.toast('lihai');
+	}
+}
 </script>
 
 <style>

@@ -8929,6 +8929,13 @@ vue-property-decorator@^8.3.0:
   dependencies:
     vue-class-component "^7.1.0"
 
+vue-pupop-toast@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/vue-pupop-toast/-/vue-pupop-toast-1.0.8.tgz#db9afcdd4fba893e93c1a94d09fe73f0bf974375"
+  integrity sha512-wxVMqbEVlHrA1c90WsgaA/dzLQwQFEi3snh2DSiia/CTHDn+6GYHm4qQazurDrAWtMpA9nG9TM/uNF38n1k2LQ==
+  dependencies:
+    vue "^2.6.10"
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
