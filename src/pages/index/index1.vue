@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		{{ time }}
+		<!-- {{ time }} -->
 		<view class="list">
 			<view
 				v-for="(i1, idx1) in list"
@@ -45,6 +45,8 @@ export default class Index extends Vue {
 	public currentStr = '';
 	public time = '2:00';
 	public timer = 0;
+	public domHeight = 0;
+	public domWidth = 0;
 
 	public list = [
 		{
@@ -88,7 +90,7 @@ export default class Index extends Vue {
 		countDown(this, 1);
 	}
 
-	public mounted() {
+	public async mounted() {
 		const len = this.list.length;
 		const len1 = this.list1.length;
 		for (let x = 0; x < len; x++) {
@@ -99,6 +101,15 @@ export default class Index extends Vue {
 				});
 			}
 		}
+		await this.$nextTick();
+		uni.createSelectorQuery()
+			.in(this)
+			.select('.child')
+			.boundingClientRect((e) => {
+				this.domHeight = e.height || 0;
+				this.domWidth = e.width || 0;
+			})
+			.exec();
 	}
 
 	// 保存左边盒子的中心点坐标
@@ -106,8 +117,8 @@ export default class Index extends Vue {
 		console.log(e);
 		const { id, offsetLeft, offsetTop } = e.target;
 		// 63盒子高度
-		this.startX = offsetLeft + 120;
-		this.startY = 63 / 2 + offsetTop;
+		this.startX = offsetLeft + this.domWidth;
+		this.startY = this.domHeight / 2 + offsetTop;
 		console.log('当前左边边盒子中心点左边x, y', this.startX, this.startY);
 
 		// 保存当前连线左边点
@@ -118,7 +129,7 @@ export default class Index extends Vue {
 		const { id, offsetLeft, offsetTop } = e.target;
 		// 计算右边盒子的中心值
 		this.endX = offsetLeft;
-		this.endY = 63 / 2 + offsetTop;
+		this.endY = this.domHeight / 2 + offsetTop;
 		console.log('当前右边盒子中心点左边x, y', this.endX, this.endY);
 		// 计算三角形两直角边长
 		const aX = this.endX - this.startX;
@@ -176,6 +187,7 @@ export default class Index extends Vue {
 	text-align: center;
 	height: 400upx;
 	display: flex;
+	overflow: auto;
 }
 .list {
 	flex: 1;
@@ -187,10 +199,13 @@ export default class Index extends Vue {
 	padding: 20px;
 	border: 1px solid red;
 }
+.child:hover {
+	background: greenyellow;
+}
 .line {
 	position: absolute;
 	top: -999px;
-	height: 10px;
+	height: 2px;
 	width: 100px;
 	background-color: red;
 }
