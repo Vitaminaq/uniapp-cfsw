@@ -9,6 +9,7 @@
 			@markertap="markertap"
 			@regionchange="regionchange"
 			@tap="selectIt"
+			@callouttap="callouttap"
 			show-location
 			style="width: 100%; height: 300px;"
 		>
@@ -25,13 +26,27 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class Navigator extends Vue {
 	public markers = [
 		{
-			// title: '目的地',
-			iconPath: '/static/position-icon.svg',
-			id: 4,
-			latitude: 22.521120010511527,
-			longitude: 113.92478942871094,
+			iconPath:
+				'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1293166224,1986999621&fm=26&gp=0.jpg',
+			id: 3,
+			latitude: 22.580925,
+			longitude: 113.954437,
 			width: 30,
 			height: 30,
+			borderRadius: 30,
+			callout: {
+				content: '到这里去'
+			}
+		},
+		{
+			iconPath:
+				'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1854308153,463637643&fm=26&gp=0.jpg',
+			id: 4,
+			latitude: 22.57529,
+			longitude: 113.863891,
+			width: 30,
+			height: 30,
+			borderRadius: 30,
 			callout: {
 				content: '到这里去'
 			}
@@ -46,6 +61,7 @@ export default class Navigator extends Vue {
 		uni.getLocation({
 			type: 'gcj02',
 			success: (res: any) => {
+				console.log(res, 'iiiiiiiiiiiiiii');
 				this.latitude = res.latitude;
 				this.longitude = res.longitude;
 			}
@@ -70,15 +86,27 @@ export default class Navigator extends Vue {
 	}
 	public selectIt(e: any) {
 		console.log('点击地图', e);
-		const { latitude, longitude } = e.detail;
-		this.latitude = latitude;
-		this.longitude = longitude;
+		// const { latitude, longitude } = e.detail;
+		// this.latitude = latitude;
+		// this.longitude = longitude;
 	}
 	public markertap(e: any) {
-		console.log('点击标记', e);
+		// console.log('点击标记', e);
 	}
 	public regionchange(e: any) {
-		console.log('视野变化', e);
+		// console.log('视野变化', e);
+	}
+	public callouttap(e: any) {
+		console.log(e);
+		const mark = this.markers.filter((item) => {
+			return item.id === e.markerId;
+		});
+		uni.openLocation({
+			name: '哈哈哈',
+			address: '1236453',
+			latitude: mark[0].latitude, //要去的纬度-地址
+			longitude: mark[0].longitude //要去的经度-地址
+		});
 	}
 }
 </script>
