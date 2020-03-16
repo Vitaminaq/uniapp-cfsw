@@ -49,11 +49,15 @@
     },
     "mp-weixin": {
         "usingComponents":true,
-        "appid": "",
+        "appid": "wx6a73315e44f61c38",
         "setting" : {
-
         	"urlCheck" : true
-        }
+        },
+        "permission": {
+		    "scope.userLocation": {
+		      "desc": "小程序需获取你的位置信息进行导航"
+		    }
+		}
     },
     "mp-alipay" : {
         "usingComponents" : true
