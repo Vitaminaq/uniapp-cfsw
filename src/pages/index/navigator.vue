@@ -4,26 +4,25 @@
 			id="map"
 			:longitude="longitude"
 			:latitude="latitude"
-			scale="14"
+			scale="12"
 			:markers="markers"
-			@markertap="markertap"
-			@regionchange="regionchange"
-			@tap="selectIt"
 			@callouttap="callouttap"
 			show-location
-			style="width: 100%; height: 300px;"
+			style="width: 100%; height: 100vh;"
 		>
 		</map>
-		<button type="primary" @tap="toPath">去哪儿</button>
-		<button type="primary" @tap="navigate">导航</button>
 	</view>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+const QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
+const plugin = requirePlugin('routePlan');
 
 @Component<Navigator>({})
 export default class Navigator extends Vue {
+	public qqmapsdk: any = null;
+	public includePoints: any = [];
 	public markers = [
 		{
 			iconPath:
@@ -64,7 +63,11 @@ export default class Navigator extends Vue {
 				console.log(res, 'iiiiiiiiiiiiiii');
 				this.latitude = res.latitude;
 				this.longitude = res.longitude;
+				// this.includePoints = [...this]
 			}
+		});
+		this.qqmapsdk = new QQMapWX({
+			key: 'UFTBZ-HATC6-VYESI-MSJXK-YIAQ7-IEBRU'
 		});
 	}
 
@@ -84,28 +87,42 @@ export default class Navigator extends Vue {
 			}
 		});
 	}
-	public selectIt(e: any) {
-		console.log('点击地图', e);
-		// const { latitude, longitude } = e.detail;
-		// this.latitude = latitude;
-		// this.longitude = longitude;
-	}
-	public markertap(e: any) {
-		// console.log('点击标记', e);
-	}
-	public regionchange(e: any) {
-		// console.log('视野变化', e);
-	}
+
 	public callouttap(e: any) {
-		console.log(e);
 		const mark = this.markers.filter((item) => {
 			return item.id === e.markerId;
 		});
-		uni.openLocation({
-			name: '哈哈哈',
-			address: '1236453',
-			latitude: mark[0].latitude, //要去的纬度-地址
-			longitude: mark[0].longitude //要去的经度-地址
+		console.log(mark[0].latitude, mark[0].longitude);
+		this.qqmapsdk.reverseGeocoder({
+			location: `${mark[0].latitude},${mark[0].longitude}`,
+			key: 'X0Bt8yzF7j6lF4DkSyvrfaF12pOM9Idw',
+			success: (res: any) => {
+				console.log(res, 'ggggggggggggg');
+				const { address, formatted_addresses } = res.result;
+				let key = 'UFTBZ-HATC6-VYESI-MSJXK-YIAQ7-IEBRU'; //使用在腾讯位置服务申请的key
+				let referer = 'uniapp-cfsw'; //调用插件的app的名称
+				let endPoint = JSON.stringify({
+					//终点
+					name: formatted_addresses.recommend,
+					latitude: mark[0].latitude,
+					longitude: mark[0].longitude
+				});
+				wx.navigateTo({
+					url:
+						'plugin://routePlan/index?key=' +
+						key +
+						'&referer=' +
+						referer +
+						'&endPoint=' +
+						endPoint
+				});
+				// uni.openLocation({
+				// 	name: formatted_addresses.recommend,
+				// 	address,
+				// 	latitude: mark[0].latitude, //要去的纬度-地址
+				// 	longitude: mark[0].longitude //要去的经度-地址
+				// });
+			}
 		});
 	}
 }
