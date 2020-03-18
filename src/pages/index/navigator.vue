@@ -71,23 +71,6 @@ export default class Navigator extends Vue {
 		});
 	}
 
-	public navigate() {
-		////使用微信内置地图查看标记点位置，并进行导航
-		uni.openLocation({
-			name: '哈哈哈',
-			latitude: this.markers[0].latitude, //要去的纬度-地址
-			longitude: this.markers[0].longitude //要去的经度-地址
-		});
-	}
-	public toPath() {
-		uni.chooseLocation({
-			keyword: '西乡',
-			success: (res: any) => {
-				console.log(res);
-			}
-		});
-	}
-
 	public callouttap(e: any) {
 		const mark = this.markers.filter((item) => {
 			return item.id === e.markerId;
@@ -114,14 +97,9 @@ export default class Navigator extends Vue {
 						'&referer=' +
 						referer +
 						'&endPoint=' +
-						endPoint
+						endPoint +
+						'&navigation=1'
 				});
-				// uni.openLocation({
-				// 	name: formatted_addresses.recommend,
-				// 	address,
-				// 	latitude: mark[0].latitude, //要去的纬度-地址
-				// 	longitude: mark[0].longitude //要去的经度-地址
-				// });
 			}
 		});
 	}

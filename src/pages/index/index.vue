@@ -6,15 +6,19 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { boundingClientRect } from '@/utils/publics';
-
-interface Point {
-	x: number;
-	y: number;
-}
+import api from '@/api/wechat';
 
 @Component<Index>({})
 export default class Index extends Vue {
+	public async onLoad() {
+		// uni.login({
+		// 	provider: 'weixin',
+		// 	success: async ({ code }) => {
+		// 		if (!code) return;
+		// 		await api.getUnion({ code });
+		// 	}
+		// });
+	}
 	public toWatch() {
 		return uni.navigateTo({ url: '/pages/index/navigator' });
 	}

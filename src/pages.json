@@ -11,6 +11,12 @@
 			"style": {
 				"navigationBarTitleText": "导航"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		}
 	],
 	"globalStyle": {
