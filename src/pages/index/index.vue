@@ -11,13 +11,20 @@ import api from '@/api/wechat';
 @Component<Index>({})
 export default class Index extends Vue {
 	public async onLoad() {
-		// uni.login({
-		// 	provider: 'weixin',
-		// 	success: async ({ code }) => {
-		// 		if (!code) return;
-		// 		await api.getUnion({ code });
-		// 	}
-		// });
+		//获取当前位置
+		uni.getLocation({
+			type: 'gcj02',
+			success: (res: any) => {
+				api.savePosition({
+					latitude: res.latitude,
+					longitude: res.longitude
+				});
+				console.log(res, 'iiiiiiiiiiiiiii');
+				// this.latitude = res.latitude;
+				// this.longitude = res.longitude;
+				// this.includePoints = [...this]
+			}
+		});
 	}
 	public toWatch() {
 		return uni.navigateTo({ url: '/pages/index/navigator' });

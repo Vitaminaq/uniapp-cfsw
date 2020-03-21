@@ -18,6 +18,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 const QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
 const plugin = requirePlugin('routePlan');
+import api from '@/api/wechat';
 
 @Component<Navigator>({})
 export default class Navigator extends Vue {
@@ -55,7 +56,7 @@ export default class Navigator extends Vue {
 	latitude = '';
 	longitude = '';
 
-	onLoad() {
+	async onLoad() {
 		//获取当前位置
 		uni.getLocation({
 			type: 'gcj02',
@@ -69,6 +70,7 @@ export default class Navigator extends Vue {
 		this.qqmapsdk = new QQMapWX({
 			key: 'UFTBZ-HATC6-VYESI-MSJXK-YIAQ7-IEBRU'
 		});
+		const r = await api.getAll();
 	}
 
 	public callouttap(e: any) {

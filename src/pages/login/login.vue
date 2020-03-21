@@ -27,11 +27,20 @@ export default class Index extends Vue {
 			}
 		});
 	}
-	public getUserInfo(e: any) {
+	public async getUserInfo(e: any) {
 		const detail = e.detail;
 		const { encryptedData, iv, userInfo } = detail;
 		if (!encryptedData) return;
 		console.log(detail, 'jjjjjjjjjjjjjjj');
+		const r = await api.getUnion({
+			code: this.code,
+			avatarUrl: userInfo.avatarUrl,
+			nickName: userInfo.nickName
+		});
+		if (r.code !== 0) return;
+		uni.setStorageSync('token', r.data.token);
+		uni.setStorageSync('uid', r.data.uid);
+		uni.navigateTo({ url: '/pages/index/index' });
 		// return saveUserInfo(this.loginCode, encryptedData, iv, userInfo);
 	}
 }

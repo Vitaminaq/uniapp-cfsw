@@ -6,6 +6,10 @@ export default (url: string, method: RequestOptions['method'], params: any) => {
 			url: `${baseUrl}${url}`,
 			method,
 			data: params,
+			header: {
+				token: uni.getStorageSync('token'),
+				uid: uni.getStorageSync('uid')
+			},
 			success: (res) => {
 				resolve(res.data);
 			},
