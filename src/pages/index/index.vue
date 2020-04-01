@@ -14,15 +14,15 @@ export default class Index extends Vue {
 		//获取当前位置
 		uni.getLocation({
 			type: 'gcj02',
-			success: (res: any) => {
-				api.savePosition({
+			success: async (res: any) => {
+				const r = await api.savePosition({
 					latitude: res.latitude,
 					longitude: res.longitude
 				});
-				console.log(res, 'iiiiiiiiiiiiiii');
-				// this.latitude = res.latitude;
-				// this.longitude = res.longitude;
-				// this.includePoints = [...this]
+				if (r.code !== 0)
+					return uni.redirectTo({
+						url: `/pages/login/login?code=${res.code}`
+					});
 			}
 		});
 	}

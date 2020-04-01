@@ -14,24 +14,29 @@
 import { Vue, Component } from 'vue-property-decorator';
 import api from '@/api/wechat';
 
+interface Options {
+	code: string;
+}
+
 @Component<Index>({})
 export default class Index extends Vue {
+	// 微信code
 	public code: string = '';
-	public async onLoad() {
+
+	public async onLoad(options: Options) {
 		uni.login({
 			provider: 'weixin',
-			success: async ({ code }) => {
+			success: ({ code }) => {
 				if (!code) return;
 				this.code = code;
-				// await api.getUnion({ code });
 			}
 		});
 	}
-	public async getUserInfo(e: any) {
+
+	public async getUserInfo(e: any): Promise<void> {
 		const detail = e.detail;
 		const { encryptedData, iv, userInfo } = detail;
 		if (!encryptedData) return;
-		console.log(detail, 'jjjjjjjjjjjjjjj');
 		const r = await api.getUnion({
 			code: this.code,
 			avatarUrl: userInfo.avatarUrl,
@@ -40,8 +45,8 @@ export default class Index extends Vue {
 		if (r.code !== 0) return;
 		uni.setStorageSync('token', r.data.token);
 		uni.setStorageSync('uid', r.data.uid);
-		uni.navigateTo({ url: '/pages/index/index' });
-		// return saveUserInfo(this.loginCode, encryptedData, iv, userInfo);
+		if (r.data.cid) return uni.redirectTo({ url: '/pages/index/index' });
+		return uni.redirectTo({ url: '/pages/login/create-or-join' });
 	}
 }
 </script>
@@ -51,6 +56,7 @@ export default class Index extends Vue {
 	height: 100vh;
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }

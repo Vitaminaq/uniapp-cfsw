@@ -23,35 +23,7 @@ import api from '@/api/wechat';
 @Component<Navigator>({})
 export default class Navigator extends Vue {
 	public qqmapsdk: any = null;
-	public includePoints: any = [];
-	public markers = [
-		{
-			iconPath:
-				'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1293166224,1986999621&fm=26&gp=0.jpg',
-			id: 3,
-			latitude: 22.580925,
-			longitude: 113.954437,
-			width: 30,
-			height: 30,
-			borderRadius: 30,
-			callout: {
-				content: '到这里去'
-			}
-		},
-		{
-			iconPath:
-				'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1854308153,463637643&fm=26&gp=0.jpg',
-			id: 4,
-			latitude: 22.57529,
-			longitude: 113.863891,
-			width: 30,
-			height: 30,
-			borderRadius: 30,
-			callout: {
-				content: '到这里去'
-			}
-		}
-	];
+	public markers: any[] = [];
 	//当前定位位置
 	latitude = '';
 	longitude = '';
@@ -64,13 +36,27 @@ export default class Navigator extends Vue {
 				console.log(res, 'iiiiiiiiiiiiiii');
 				this.latitude = res.latitude;
 				this.longitude = res.longitude;
-				// this.includePoints = [...this]
 			}
 		});
 		this.qqmapsdk = new QQMapWX({
 			key: 'UFTBZ-HATC6-VYESI-MSJXK-YIAQ7-IEBRU'
 		});
 		const r = await api.getAll();
+		if (r.code !== 0) return;
+		this.markers = r.data.map((item: any) => {
+			return {
+				iconPath: item.avatarUrl,
+				id: item.uid,
+				latitude: item.latitude,
+				longitude: item.longitude,
+				width: 30,
+				height: 30,
+				borderRadius: 30,
+				callout: {
+					content: '到这里去'
+				}
+			};
+		});
 	}
 
 	public callouttap(e: any) {
