@@ -10,7 +10,11 @@ export default (url: string, method: RequestOptions['method'], params: any) => {
 				token: uni.getStorageSync('token'),
 				uid: uni.getStorageSync('uid')
 			},
-			success: (res) => {
+			success: (res: any) => {
+				const { data } = res;
+				if (data && data.code !== 0) {
+					uni.navigateTo({ url: '/pages/login/login' });
+				}
 				resolve(res.data);
 			},
 			fail: (e) => {

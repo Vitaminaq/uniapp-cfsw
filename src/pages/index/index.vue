@@ -1,16 +1,57 @@
 <template>
-	<view>
-		<button type="primary" @tap="toWatch">查看员工位置</button>
+	<view class="index-contain">
+		<image :src="userInfo.avatarUrl" class="head-img" />
+		<view class="info">
+			<MenuItem
+				v-for="(item, index) in menuList"
+				:key="item.left"
+				:left="item.left"
+				:right="item.right"
+				:index="index"
+				:len="menuList.length"
+			/>
+		</view>
+		<button class="submit-btn" type="primary" @tap="toWatch">
+			查看{{ userInfo.type === 1 ? '员工' : '同事' }}位置
+		</button>
 	</view>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import MenuItem from './components/menu-item.vue';
 import api from '@/api/wechat';
 
-@Component<Index>({})
+@Component<Index>({
+	components: {
+		MenuItem
+	}
+})
 export default class Index extends Vue {
+	public userInfo: any = null;
+	public get menuList() {
+		if (!this.userInfo) return [];
+		const { nickname, type, cname } = this.userInfo;
+		return [
+			{
+				left: '昵称',
+				right: nickname
+			},
+			{
+				left: '所属公司',
+				right: cname
+			},
+			{
+				left: '身份',
+				right: type === 1 ? '老板' : '员工'
+			}
+		];
+	}
 	public async onLoad() {
+		// 获取用户信息
+		const info = await api.getUserInfo();
+		if (info.code !== 0) return;
+		this.userInfo = info.data;
 		//获取当前位置
 		uni.getLocation({
 			type: 'gcj02',
@@ -33,50 +74,39 @@ export default class Index extends Vue {
 </script>
 
 <style>
-.top-content {
-	width: 100%;
-	height: 600px;
-}
-.content {
-	position: relative;
-	text-align: center;
-	width: 100%;
-	height: 400px;
-	display: flex;
-	/* overflow: auto; */
-}
-.list {
-	position: relative;
-	flex: 1;
+.index-contain {
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	height: 100vh;
 }
-.left {
-	float: left;
+.head-img {
+	padding: 40rpx 0;
+	height: 100rpx;
+	width: 100rpx;
+	border-radius: 100rpx;
+	display: block;
+	margin: 0 auto;
 }
-.right {
-	float: right;
+.info {
+	flex: 1;
 }
-.child {
-	padding: 20px;
-	border: 1px solid red;
+.submit-btn {
+	margin: 0 auto;
+	padding: 0;
+	width: 80%;
+	height: 94rpx;
+	background: linear-gradient(
+		90deg,
+		rgba(68, 208, 255, 1) 0%,
+		rgba(37, 180, 255, 1) 100%
+	);
+	border-radius: 47rpx;
+	line-height: 94rpx;
+	text-align: center;
+	color: #fff;
+	margin-bottom: 32rpx;
 }
-.canvas {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	height: 400px;
-	width: 375px;
-	z-index: -1;
-	border: 1px solid #d3d3d3;
+button:after {
+	border: none;
 }
-/* .left-cvs {
-	z-index: 99;
-} */
-/* .right-cvs {
-	z-index: -2;
-} */
 </style>
