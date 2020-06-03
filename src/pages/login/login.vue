@@ -45,6 +45,8 @@ export default class Index extends Vue {
 		if (r.code !== 0) return;
 		uni.setStorageSync('token', r.data.token);
 		uni.setStorageSync('uid', r.data.uid);
+		uni.setStorageSync('cid', r.data.cid);
+		console.log(r.data.cid, 'kkkkkkkkkkkkkkkk')
 		if (r.data.cid) return uni.redirectTo({ url: '/pages/index/index' });
 		return uni.redirectTo({ url: '/pages/login/create-or-join' });
 	}

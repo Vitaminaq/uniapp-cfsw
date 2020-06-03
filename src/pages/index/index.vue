@@ -14,6 +14,7 @@
 		<button class="submit-btn" type="primary" @tap="toWatch">
 			查看{{ userInfo.type === 1 ? '员工' : '同事' }}位置
 		</button>
+		<image class="login-out" src="/static/login-out.png" @tap="loginOut" />
 	</view>
 </template>
 
@@ -70,14 +71,43 @@ export default class Index extends Vue {
 	public toWatch() {
 		return uni.navigateTo({ url: '/pages/index/navigator' });
 	}
+	public loginOut() {
+		uni.showModal({
+			title: '提示',
+			content: '是否退出当前公司？',
+			success: async ({ confirm }) => {
+				if (confirm) {
+					await api.signout();
+					uni.showToast({
+						title: '退出成功',
+						icon: 'success',
+						duration: 1000,
+						success: () => {
+							uni.removeStorageSync('cid');
+							uni.removeStorageSync('uid');
+							uni.reLaunch({ url: '/pages/login/login' })
+						}
+					})
+				}
+			}
+		});
+	}
 }
 </script>
 
 <style>
 .index-contain {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
+}
+.login-out {
+	position: absolute;
+	right: 32rpx;
+	top: 32rpx;
+	width: 44rpx;
+	height: 44rpx;
 }
 .head-img {
 	padding: 40rpx 0;

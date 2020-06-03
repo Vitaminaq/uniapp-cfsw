@@ -17,7 +17,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 const QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
+/* eslint-disable */
 const plugin = requirePlugin('routePlan');
+/* eslint-disable */
 import api from '@/api/wechat';
 
 @Component<Navigator>({})
@@ -57,6 +59,7 @@ export default class Navigator extends Vue {
 				}
 			};
 		});
+		console.log(this.markers, 'wwwwwwwwwwwwwwwwwwwwwwwwwwwww');
 	}
 
 	public callouttap(e: any) {
@@ -75,10 +78,10 @@ export default class Navigator extends Vue {
 				let endPoint = JSON.stringify({
 					//终点
 					name: formatted_addresses.recommend,
-					latitude: mark[0].latitude,
-					longitude: mark[0].longitude
+					latitude: parseFloat(mark[0].latitude),
+					longitude: parseFloat(mark[0].longitude)
 				});
-				wx.navigateTo({
+				uni.navigateTo({
 					url:
 						'plugin://routePlan/index?key=' +
 						key +

@@ -8,7 +8,8 @@ export default (url: string, method: RequestOptions['method'], params: any) => {
 			data: params,
 			header: {
 				token: uni.getStorageSync('token'),
-				uid: uni.getStorageSync('uid')
+				uid: uni.getStorageSync('uid'),
+				cid: uni.getStorageSync('cid')
 			},
 			success: (res: any) => {
 				const { data } = res;

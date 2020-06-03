@@ -19,6 +19,9 @@ export class wechatApi extends BaseAxiosApi {
 	public getUserInfo() {
 		return this.axios.get('/api/wechat/user/info');
 	}
+	public signout() {
+		return this.axios.post('/api/wechat/user/signout');
+	}
 }
 
 export default new wechatApi();
